@@ -1,0 +1,13 @@
+Django
+django-tailwind
+
+django-q2
+google-generativeai
+google-genai
+python-dotenv
+
+# Production Dependencies
+gunicorn
+whitenoise[brotli]
+dj-database-url
+psycopg2-binary

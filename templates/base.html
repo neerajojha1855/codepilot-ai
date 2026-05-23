@@ -1,0 +1,92 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-900 text-slate-50">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CodePilot AI{% endblock %} - AI Code Review</title>
+    {% tailwind_css %}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+    <style>
+        body {
+            font-family: 'Fira Sans', sans-serif;
+        }
+
+        .font-code {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Toast animation */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-enter {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-slate-900 text-slate-50 font-sans antialiased">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-800 text-white flex flex-col border-r border-slate-700">
+        <div class="h-16 flex items-center px-6 border-b border-slate-700">
+            <span class="text-xl font-bold text-green-500 font-code tracking-tight">
+                > CodePilot_
+            </span>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="{% url 'dashboard' %}"
+                class="flex items-center px-4 py-3 bg-slate-700 text-white rounded hover:bg-slate-600 transition-colors cursor-pointer">
+                <svg class="w-5 h-5 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-slate-900">
+        <!-- Header -->
+        <header class="h-16 flex items-center justify-between px-6 bg-slate-800 border-b border-slate-700">
+            <h1 class="text-xl font-semibold text-slate-100 font-code">
+                ~/ {% block header %}dashboard{% endblock %}
+            </h1>
+        </header>
+
+        <!-- Scrollable content -->
+        <div class="flex-1 overflow-auto p-8">
+            <div class="max-w-7xl mx-auto">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <!-- Include Footer -->
+        {% include 'footer.html' %}
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script src="{% static 'app.js' %}"></script>
+</body>
+
+</html>

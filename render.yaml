@@ -1,0 +1,50 @@
+databases:
+  - name: codepilot-db
+    databaseName: codepilot
+    user: codepilot_user
+    plan: free
+
+services:
+  - type: web
+    name: codepilot-web
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn CodePilot.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codepilot-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ALLOWED_HOSTS
+        value: codepilot-web.onrender.com
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: 3.12.0
+
+  - type: worker
+    name: codepilot-worker
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python manage.py qcluster"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codepilot-db
+          property: connectionString
+      - key: SECRET_KEY
+        fromService:
+          type: web
+          name: codepilot-web
+          envVarKey: SECRET_KEY
+      - key: GEMINI_API_KEY
+        fromService:
+          type: web
+          name: codepilot-web
+          envVarKey: GEMINI_API_KEY
+      - key: PYTHON_VERSION
+        value: 3.12.0
