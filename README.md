@@ -78,31 +78,6 @@ Now open `http://127.0.0.1:8000/` and start analyzing code!
 
 ---
 
-## 🚀 Deployment (Render.com)
-
-CodePilot is fully configured for deployment on Render. Here is how to set it up manually:
-
-1. **Push to GitHub**: Push your local repository to a new GitHub repository.
-2. **Create Database**: On Render, create a new **PostgreSQL** database. Copy the "Internal Database URL".
-3. **Create Web Service**: 
-   - Create a new **Web Service** connected to your GitHub repo.
-   - **Build Command**: `./build.sh`
-   - **Start Command**: `gunicorn CodePilot.wsgi:application`
-   - Add Environment Variables:
-     - `PYTHON_VERSION`: `3.12.0`
-     - `DATABASE_URL`: *(Paste the Internal Database URL)*
-     - `SECRET_KEY`: *(Generate a random string)*
-     - `DEBUG`: `False`
-     - `ALLOWED_HOSTS`: `.onrender.com`
-     - `GEMINI_API_KEY`: *(Your Google AI Studio Key)*
-4. **Create Background Worker**:
-   - Create a new **Background Worker** connected to the same repo.
-   - **Build Command**: `./build.sh`
-   - **Start Command**: `python manage.py qcluster`
-   - Link all the exact same environment variables as above!
-
----
-
 ## 🗄️ Database Models
 - **Repository:** Tracks the GitHub URL, owner, name, and scan status (`PENDING`, `ANALYZING`, `COMPLETED`, `FAILED`).
 - **FileAnalysis:** Stores quality and risk scores for individual files.
