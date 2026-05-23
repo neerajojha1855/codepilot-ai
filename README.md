@@ -21,7 +21,7 @@ CodePilot is an intelligent code review assistant that automatically analyzes yo
 
 - **Backend:** Django (Python 3.12)
 - **Database:** PostgreSQL (Production via `dj_database_url`) / SQLite (Local)
-- **AI Engine:**git add. Google Gemini (`gemini-2.0-flash` & `gemini-1.5-flash`)
+- **AI Engine:** Google Gemini (`gemini-2.0-flash` & `gemini-1.5-flash`)
 - **Task Queue:** Django Q2 (using ORM Broker)
 - **Frontend:** HTML5, Tailwind CSS v4 (Compiled Locally)
 
@@ -31,8 +31,8 @@ CodePilot is an intelligent code review assistant that automatically analyzes yo
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/CodePilot.git
-cd CodePilot
+git clone https://github.com/neerajojha1855/codepilot-ai.git
+cd codepilot-ai
 ```
 
 ### 2. Set up the Environment

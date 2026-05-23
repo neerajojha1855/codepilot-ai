@@ -6,8 +6,8 @@ echo "Installing Python dependencies..."
 pip install -r requirements.txt
 
 echo "Installing Tailwind CLI and building CSS..."
-python manage.py tailwind install --no-input
-python manage.py tailwind build --no-input
+python manage.py tailwind install
+python manage.py tailwind build
 
 echo "Collecting static files..."
 python manage.py collectstatic --no-input
