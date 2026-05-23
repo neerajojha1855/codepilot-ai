@@ -21,7 +21,7 @@ CodePilot is an intelligent code review assistant that automatically analyzes yo
 
 - **Backend:** Django (Python 3.12)
 - **Database:** PostgreSQL (Production via `dj_database_url`) / SQLite (Local)
-- **AI Enait addgine:** Google Gemini (`gemini-2.0-flash` & `gemini-1.5-flash`)
+- **AI Engine:** Google Gemini (`gemini-2.0-flash` & `gemini-1.5-flash`)
 - **Task Queue:** Django Q2 (using ORM Broker)
 - **Frontend:** HTML5, Tailwind CSS v4 (Compiled Locally)
 
@@ -80,13 +80,26 @@ Now open `http://127.0.0.1:8000/` and start analyzing code!
 
 ## 🚀 Deployment (Render.com)
 
-CodePilot is fully configured for automated Infrastructure-as-Code deployment on Render.
+CodePilot is fully configured for deployment on Render. Here is how to set it up manually:
 
-1. Push this repository to GitHub.
-2. Log into Render and create a **New Blueprint**.
-3. Connect your repository.
-4. Render will read the `render.yaml` file and automatically provision your PostgreSQL Database, Web Server, and Background Worker.
-5. Provide your `GEMINI_API_KEY` when prompted in the Render dashboard.
+1. **Push to GitHub**: Push your local repository to a new GitHub repository.
+2. **Create Database**: On Render, create a new **PostgreSQL** database. Copy the "Internal Database URL".
+3. **Create Web Service**: 
+   - Create a new **Web Service** connected to your GitHub repo.
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `gunicorn CodePilot.wsgi:application`
+   - Add Environment Variables:
+     - `PYTHON_VERSION`: `3.12.0`
+     - `DATABASE_URL`: *(Paste the Internal Database URL)*
+     - `SECRET_KEY`: *(Generate a random string)*
+     - `DEBUG`: `False`
+     - `ALLOWED_HOSTS`: `.onrender.com`
+     - `GEMINI_API_KEY`: *(Your Google AI Studio Key)*
+4. **Create Background Worker**:
+   - Create a new **Background Worker** connected to the same repo.
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `python manage.py qcluster`
+   - Link all the exact same environment variables as above!
 
 ---
 
