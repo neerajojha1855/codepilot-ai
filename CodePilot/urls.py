@@ -23,3 +23,4 @@ urlpatterns = [
 ]
 
 handler404 = 'analysis.views.custom_404'
+handler403 = 'analysis.views.custom_403'

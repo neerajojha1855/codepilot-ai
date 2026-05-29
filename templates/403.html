@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}403 Forbidden{% endblock %}
+{% block header %}error/403{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center text-center px-4" style="min-height: 70vh;">
+
+    <!-- Glowing 403 -->
+    <div class="relative mb-8" style="user-select: none;">
+        <h1 class="font-code font-extrabold leading-none"
+            style="font-size: 12rem; background: linear-gradient(135deg, #f87171, #ef4444, #dc2626); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.05em;">
+            403
+        </h1>
+        <div class="absolute inset-0 font-code font-extrabold leading-none text-red-500 pointer-events-none"
+             style="font-size: 12rem; filter: blur(40px); opacity: 0.2; letter-spacing: -0.05em;">
+            403
+        </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="mb-10" style="display: flex; flex-direction: column; gap: 1rem;">
+        <h2 class="text-2xl font-semibold text-slate-100 font-code">
+            <span class="text-yellow-500">Access Denied:</span> Forbidden
+        </h2>
+        <p class="text-slate-400 text-lg leading-relaxed" style="max-width: 28rem; margin: 0 auto;">
+            You don't have permission to access this resource. The server understood the request but refuses to authorize it.
+        </p>
+    </div>
+
+    <!-- Terminal-style error block -->
+    <div class="w-full bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-2xl mb-10" style="max-width: 32rem;">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-700" style="background-color: rgba(30, 41, 59, 0.8);">
+            <span class="rounded-full bg-red-500" style="width: 12px; height: 12px;"></span>
+            <span class="rounded-full bg-yellow-500" style="width: 12px; height: 12px;"></span>
+            <span class="rounded-full bg-green-500" style="width: 12px; height: 12px;"></span>
+            <span class="ml-2 text-xs text-slate-500 font-code">terminal</span>
+        </div>
+        <div class="px-5 py-4 font-code text-sm text-left space-y-2">
+            <p class="text-slate-500">
+                <span class="text-green-400">$</span> sudo cat {{ request.path }}
+            </p>
+            <p class="text-red-400">
+                HTTP/1.1 403 Forbidden
+            </p>
+            <p class="text-slate-500">
+                <span class="text-red-400">permission denied</span>
+            </p>
+            <p class="text-slate-500">
+                <span class="text-green-400">$</span> <span class="animate-pulse">▌</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Action button -->
+    <a href="/"
+       class="inline-flex items-center gap-2 py-3 px-6 text-white font-semibold rounded-lg transition-all duration-300"
+       style="background: linear-gradient(to right, #ef4444, #dc2626); box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.25);"
+       onmouseover="this.style.background='linear-gradient(to right, #f87171, #ef4444)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(239, 68, 68, 0.4)';"
+       onmouseout="this.style.background='linear-gradient(to right, #ef4444, #dc2626)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 15px -3px rgba(239, 68, 68, 0.25)';">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+            </path>
+        </svg>
+        Return to Safety
+    </a>
+</div>
+{% endblock %}
