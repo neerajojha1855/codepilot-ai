@@ -6,4 +6,5 @@ urlpatterns = [
     path('analyze/', views.analyze_repo, name='analyze_repo'),
     path('repo/<int:pk>/', views.repo_detail, name='repo_detail'),
     path('repo/<int:pk>/delete/', views.delete_repo, name='delete_repo'),
+    path('404/', views.custom_404, {'exception': None}, name='preview_404'),  # Preview route
 ]

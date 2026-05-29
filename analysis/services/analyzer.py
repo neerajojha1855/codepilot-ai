@@ -90,7 +90,7 @@ def call_gemini_analysis(file_path, file_content):
     ```
     """
     
-    models_to_try = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
+    models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash']
     
     for model_name in models_to_try:
         try:
@@ -106,7 +106,10 @@ def call_gemini_analysis(file_path, file_content):
                 text = text[:-3]
             return json.loads(text.strip())
         except Exception as e:
-            print(f"Gemini API Error with {model_name}: {e}")
+            error_msg = str(e)
+            print(f"Gemini API Error with {model_name}: {error_msg}")
+            if '404' in error_msg:
+                print(f"  → Model '{model_name}' not found. Trying next model...")
             continue
             
     return None

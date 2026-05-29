@@ -5,6 +5,10 @@ from .models import Repository, FileAnalysis
 # We no longer import analyze_repository directly since it's a background task
 # from .services.analyzer import analyze_repository
 
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
 def dashboard(request):
     repositories = Repository.objects.all().order_by('-created_at')
     context = {
