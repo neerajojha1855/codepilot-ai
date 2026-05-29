@@ -7,11 +7,11 @@ from google import genai
 from urllib.parse import urlparse
 from analysis.models import Repository, FileAnalysis, Vulnerability, ReviewComment
 
-# Configure Gemini
-api_key = os.getenv("GEMINI_API_KEY")
-gemini_client = None
-if api_key:
-    gemini_client = genai.Client(api_key=api_key)
+def get_gemini_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if api_key:
+        return genai.Client(api_key=api_key)
+    return None
 
 def extract_owner_repo(github_url):
     try:
@@ -25,14 +25,19 @@ def extract_owner_repo(github_url):
 
 def fetch_real_files(owner, repo):
     try:
+        headers = {'User-Agent': 'CodePilot'}
+        github_token = os.getenv("GITHUB_TOKEN")
+        if github_token:
+            headers['Authorization'] = f"token {github_token}"
+            
         repo_url = f"https://api.github.com/repos/{owner}/{repo}"
-        req = urllib.request.Request(repo_url, headers={'User-Agent': 'CodePilot'})
+        req = urllib.request.Request(repo_url, headers=headers)
         with urllib.request.urlopen(req) as response:
             repo_data = json.loads(response.read().decode())
             default_branch = repo_data.get('default_branch', 'main')
 
         tree_url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{default_branch}?recursive=1"
-        req = urllib.request.Request(tree_url, headers={'User-Agent': 'CodePilot'})
+        req = urllib.request.Request(tree_url, headers=headers)
         with urllib.request.urlopen(req) as response:
             tree_data = json.loads(response.read().decode())
             
@@ -56,7 +61,12 @@ def fetch_real_files(owner, repo):
 
 def get_file_content(raw_url):
     try:
-        req = urllib.request.Request(raw_url, headers={'User-Agent': 'CodePilot'})
+        headers = {'User-Agent': 'CodePilot'}
+        github_token = os.getenv("GITHUB_TOKEN")
+        if github_token:
+            headers['Authorization'] = f"token {github_token}"
+            
+        req = urllib.request.Request(raw_url, headers=headers)
         with urllib.request.urlopen(req) as response:
             return response.read().decode('utf-8')
     except Exception:
@@ -64,7 +74,8 @@ def get_file_content(raw_url):
 
 def call_gemini_analysis(file_path, file_content):
     """Calls Gemini API to analyze the file content for vulnerabilities and smells."""
-    if not api_key or not gemini_client:
+    gemini_client = get_gemini_client()
+    if not gemini_client:
         return {"error": "No Gemini API Key provided"}
         
     prompt = f"""
@@ -90,9 +101,9 @@ def call_gemini_analysis(file_path, file_content):
     ```
     """
     
-    models_to_try = ['gemini-2.0-flash', 'gemini-1.5-flash']
+    model_names = ['gemini-2.5-flash']
     
-    for model_name in models_to_try:
+    for model_name in model_names:
         try:
             response = gemini_client.models.generate_content(
                 model=model_name,
@@ -144,7 +155,7 @@ def process_repository_task(repo_id):
             
             # Use Gemini if key exists, otherwise use a fallback mock response
             gemini_result = None
-            if api_key and content:
+            if os.getenv("GEMINI_API_KEY") and content:
                 gemini_result = call_gemini_analysis(file_path, content)
                 time.sleep(4) # Respect basic rate limits (15 RPM free)
 
